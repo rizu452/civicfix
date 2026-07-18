@@ -14,6 +14,8 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 const fetchBrowserCoordinates = () => {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
@@ -37,7 +39,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const refreshDashboardData = () => {
-    fetch("http://127.0.0.1:8000/api/complaints")
+    fetch(`${API_BASE}/api/complaints`)
       .then((res) => res.json())
       .then((data) => {
         setComplaints(data || []);
@@ -68,7 +70,7 @@ function App() {
     uploadFormData.append("file", selectedFile);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/analyze-image", {
+      const response = await fetch(`${API_BASE}/api/analyze-image`, {
         method: "POST",
         body: uploadFormData,
       });
@@ -99,7 +101,7 @@ function App() {
     formPayload.append("longitude", position.longitude);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/report", {
+      const res = await fetch(`${API_BASE}/api/report`, {
         method: "POST",
         body: formPayload,
       });
